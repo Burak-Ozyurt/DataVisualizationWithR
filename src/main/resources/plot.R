@@ -11,7 +11,7 @@ function(dataHolder) {
         xlab="Time",
         ylab="Value",
         type = c('l','g'),
-        col.line='brown')
+        col.line='brown4')
     print(plot)
     svg.off()
 }
