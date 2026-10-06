@@ -24,6 +24,8 @@ public class PlotController {
     @Autowired
     private Function<DataHolder, String> plotFunction;
 
+    @Autowired MongoDataRepository mongoDataRepository;
+
     @Bean
     Function<DataHolder, String> getPlotFunction(@Autowired Context ctx)
             throws IOException {
@@ -33,7 +35,7 @@ public class PlotController {
         return ctx.eval(source).as(Function.class);
     }
 
-    public static double x = 0;
+    private int index = 0;
 
     @RequestMapping(value = "/plot", produces = "image/svg+xml")
     public ResponseEntity<String> load() {
@@ -41,15 +43,23 @@ public class PlotController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Refresh", "1");
 
+        MongoData mongoData = mongoDataRepository.findByIdEquals(index);
+
+        double value = mongoData.getValue();
+
         String svg = "";
 
         synchronized (plotFunction) {
             svg = plotFunction.apply(
-                    new DataHolder(10 * Math.sin(x)));
+                    new DataHolder(value));
         }
 
-        x += 0.1;
-        x %= 2 * Math.PI;
+        index++;
+
+        if (index >= 100) {
+            index = 0;
+        }
+
 
         return new ResponseEntity<>(
                 svg, responseHeaders, HttpStatus.OK);
