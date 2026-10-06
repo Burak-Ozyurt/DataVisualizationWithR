@@ -8,7 +8,7 @@ Technologies:
 - lattice
 
 Database:
-Big_Data / pro1
+MongoDB
 
 Run:
 export MONGODB_URI=mongodb://<host>:27017/Big_Data
