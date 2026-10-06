@@ -1,8 +1,7 @@
 library(lattice)
 data <<- numeric(100)
 
-function(dataHolder)
-{
+function(dataHolder) {
     svg()
     data <<- c(data[2:100],dataHolder$value)
 
